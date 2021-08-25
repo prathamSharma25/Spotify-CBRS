@@ -225,7 +225,7 @@ if song_name:
     
         # Reset index for DataFrames
         recommended_songs.reset_index(drop=True, inplace=True)
-        recommended_artists.reset_index(d/rop=True, inplace=True)
+        recommended_artists.reset_index(drop=True, inplace=True)
         
         # Rename columns
         recommended_songs.rename(columns={'name':'Name', 'artists':'Artists', 'release_year':'Release Year'}, inplace=True)
