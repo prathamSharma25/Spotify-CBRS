@@ -5,6 +5,7 @@ In the first part of the project, the existing Spotify dataset is transformed in
 
 # Streamlit App
 THe recommendation system is deployed using Strealit. Check it out [here](https://share.streamlit.io/prathamsharma25/spotify-cbrs/main/App/app.py)
+
 ![App screenshot](app.png)
 
 ---
