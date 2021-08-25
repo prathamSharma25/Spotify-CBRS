@@ -178,7 +178,7 @@ def spotify_recommender(song_name):
     except:
         # If given song is not found in song library then return error message
         error_msg = '{} not found in songs library.'.format(song_name)
-        return (error_msg)
+        return [error_msg]
     
 
 # Set app title
@@ -214,7 +214,7 @@ if song_name:
     # Call spotify_recommender() function with given song name
     return_values = spotify_recommender(song_name)
     # If there is only 1 return value then display error message
-    if len(return_values)==41:
+    if len(return_values)==1:
         st.write('')
         st.write('Oops! {} was not found in the songs library.'.format(song_name))
     
