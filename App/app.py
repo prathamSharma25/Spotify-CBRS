@@ -23,6 +23,9 @@ warnings.filterwarnings('ignore')
 # Read song library data file
 song_library = pd.read_csv('App/song_library.csv', na_filter=False)
 
+# Keep only first 1,000 records
+song_library = song_library.head(1000)
+
 # Drop "id_artists" field from DataFrame
 song_library.drop(['id_artists'], axis=1, inplace=True)
 
@@ -89,6 +92,9 @@ def song_recommender(song_name):
 # Artist recommender
 # Read artist library data file
 artist_library = pd.read_csv('App/artist_library.csv', na_filter=False)
+
+# Keep only first 1,000 records
+artist_library = artist_library.head(1000)
 
 # Reset index for DataFrame
 artist_library.reset_index(inplace=True, drop=True)
