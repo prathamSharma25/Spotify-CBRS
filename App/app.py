@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 
 # Song recommender
 # Read song library data file
-song_library = pd.read_csv('song_library.csv', na_filter=False)
+song_library = pd.read_csv('/song_library.csv', na_filter=False)
 
 # Drop "id_artists" field from DataFrame
 song_library.drop(['id_artists'], axis=1, inplace=True)
@@ -88,7 +88,7 @@ def song_recommender(song_name):
 
 # Artist recommender
 # Read artist library data file
-artist_library = pd.read_csv('artist_library.csv', na_filter=False)
+artist_library = pd.read_csv('/artist_library.csv', na_filter=False)
 
 # Reset index for DataFrame
 artist_library.reset_index(inplace=True, drop=True)
@@ -202,7 +202,7 @@ def set_background(png_file):
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-set_background('background.png')
+set_background('/background.png')
 
 # Page title
 st.title('Spotify Recommendation System')
@@ -225,7 +225,7 @@ if song_name:
     
         # Reset index for DataFrames
         recommended_songs.reset_index(drop=True, inplace=True)
-        recommended_artists.reset_index(drop=True, inplace=True)
+        recommended_artists.reset_index(d/rop=True, inplace=True)
         
         # Rename columns
         recommended_songs.rename(columns={'name':'Name', 'artists':'Artists', 'release_year':'Release Year'}, inplace=True)
