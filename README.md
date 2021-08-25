@@ -3,6 +3,8 @@ This is a Content-based Recommendation System (CBRS) for Spotify developed using
 
 In the first part of the project, the existing Spotify dataset is transformed into a form that is more usable for modelling and developing the recommendation system. Part 2 involves Exploratory Data Analysis of this data and development of the CBRS.
 
+---
+# Streamlit App
 ![App screenshot](app.png)
 
 ---
