@@ -225,7 +225,7 @@ def set_background(png_file):
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-set_background('background.png')
+set_background('App/background.png')
 
 # Page title
 st.title('Spotify Recommendation System')
