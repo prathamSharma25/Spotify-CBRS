@@ -3,6 +3,7 @@
 import pandas as pd
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
+pd.set_option('display.max_colwidth', -1)
 
 # For creating vectors from text and determining similarity
 from sklearn.feature_extraction.text import CountVectorizer
@@ -19,12 +20,17 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
+# Function to make song links clickable
+def make_song_url_clickable(song_link):
+    return '<a target="_blank" href={}>Listen on Spotify</a>'.format(song_link)
+
+# Function to make artist links clickable
+def make_artist_url_clickable(artist_link):
+    return '<a target="_blank" href={}>View on Spotify</a>'.format(artist_link)
+
 # Song recommender
 # Read song library data file
-song_library = pd.read_csv('App/song_library.csv', na_filter=False)
-
-# Keep only first 5,000 records
-song_library = song_library.head(5000)
+song_library = pd.read_csv('song_library.csv', na_filter=False)
 
 # Drop "id_artists" field from DataFrame
 song_library.drop(['id_artists'], axis=1, inplace=True)
@@ -80,8 +86,15 @@ def song_recommender(song_name):
         # Sort DataFrame based on "similarity" column
         song_library.sort_values(by=['similarity', 'popularity', 'release_year'], ascending=[False, False, False], inplace=True)
 
-        # Create DataFrame "recommended_songs" containing 5 songs that are most similar to the given song and return this DataFrame
-        recommended_songs = song_library[['name', 'artists', 'release_year']][2:7]
+        # Create DataFrame "recommended_songs" containing 5 songs that are most similar to the given song
+        recommended_songs = song_library[['id', 'name', 'artists', 'release_year']][2:7]
+        
+        # List of URLs for recommended songs
+        recommended_songs['Listen on Spotify'] = ['https://open.spotify.com/track/{}'.format(id) for id in recommended_songs['id']]
+        recommended_songs['Listen on Spotify'] = recommended_songs['Listen on Spotify'].apply(make_song_url_clickable)
+        
+        # Drop id column and return recommended_songs DataFrame
+        recommended_songs.drop(['id'], axis=1, inplace=True)
         return recommended_songs
     except:
         # If given song is not found in song library then return error message
@@ -91,10 +104,7 @@ def song_recommender(song_name):
 
 # Artist recommender
 # Read artist library data file
-artist_library = pd.read_csv('App/artist_library.csv', na_filter=False)
-
-# Keep only first 5,000 records
-artist_library = artist_library.head(5000)
+artist_library = pd.read_csv('artist_library.csv', na_filter=False)
 
 # Reset index for DataFrame
 artist_library.reset_index(inplace=True, drop=True)
@@ -147,8 +157,15 @@ def artist_recommender(artist_name):
         artist_library.sort_values(by=['similarity', 'popularity', 'followers'], ascending=[False, False, False], inplace=True)
 
         # Create DataFrame "recommended_artists" containing 5 artists that are most similar to the given artist, sort and return this DataFrame
-        recommended_artists = artist_library[['name', 'followers', 'popularity']][2:7]
+        recommended_artists = artist_library[['id', 'name', 'followers', 'popularity']][2:7]
         recommended_artists.sort_values(by=['popularity', 'followers'], ascending=[False, False], inplace=True)
+        
+        # List of URLs for recommended artists
+        recommended_artists['View on Spotify'] = ['https://open.spotify.com/artist/{}'.format(id) for id in recommended_artists['id']]
+        recommended_artists['View on Spotify'] = recommended_artists['View on Spotify'].apply(make_artist_url_clickable)
+        
+        # Drop id column and return recommended_artists DataFrame
+        recommended_artists.drop(['id'], axis=1, inplace=True)
         return recommended_artists
     except:
         # If given artist is not found in artist library then return error message
@@ -208,7 +225,7 @@ def set_background(png_file):
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-set_background('App/background.png')
+set_background('background.png')
 
 # Page title
 st.title('Spotify Recommendation System')
@@ -236,12 +253,14 @@ if song_name:
         # Rename columns
         recommended_songs.rename(columns={'name':'Name', 'artists':'Artists', 'release_year':'Release Year'}, inplace=True)
         recommended_artists.rename(columns={'name':'Name', 'followers':'Followers', 'popularity':'Popularity'}, inplace=True)
-        
+    
         # Display recommended songs
         st.write('')
         st.write('More songs you might like:')
-        st.write(recommended_songs)
+        st.write(recommended_songs.to_html(escape=False, index=False), unsafe_allow_html=True)
         
         # Display recommended artists
+        st.write('')
+        st.write('')
         st.write('Other artists you might like:')
-        st.write(recommended_artists)
+        st.write(recommended_artists.to_html(escape=False, index=False), unsafe_allow_html=True)
